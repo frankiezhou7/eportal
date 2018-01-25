@@ -1,0 +1,39 @@
+a {
+  color: #ff4081; /*pinkA200*/
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+html {
+  font-family: 'Roboto', 'Lantinghei SC', 'Hiragino Sans GB', 'Microsoft YaHei', 微软雅黑, STHeiti, 'WenQuanYi Micro Hei', SimSun, sans-serif;
+  height: 100%;
+}
+
+body, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+body {
+  font-size: 13px;
+  line-height: 20px;
+  height: 100%;
+  /* 去除mac上chrome和opera浏览器的橡胶带效果 */
+  overflow: hidden;
+}
+
+#main {
+  height: 100%;
+}
+
+.alignment--left{
+    text-align:left;
+}
+.alignment--center{
+    text-align:center;
+}
+.alignment--right{
+    text-align:right;
+}

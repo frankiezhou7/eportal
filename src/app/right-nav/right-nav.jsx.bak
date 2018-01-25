@@ -1,0 +1,211 @@
+const React = require('react');
+const ReactDOM = require('react-dom');
+const _ = require('eplodash');
+const AutoStyle = require('epui-auto-style').mixin;
+const Avatar = require('epui-md/Avatar');
+const FloatingActionButton = require('epui-md/FloatingActionButton');
+const PropTypes = React.PropTypes;
+const RightNavMain = require('./right-nav-main');
+const ToggleStar = require('epui-md/svg-icons/toggle/star');
+const Translatable = require('epui-intl').mixin;
+
+const RightNav = React.createClass({
+  mixins: [AutoStyle, Translatable],
+
+  contextTypes: {
+    muiTheme: PropTypes.object,
+  },
+
+  propTypes: {
+    local: PropTypes.object,
+    openRightNav: PropTypes.func,
+    closeRightNav: PropTypes.func,
+    showRightNav: PropTypes.func,
+    dismissRightNav: PropTypes.func,
+    open: PropTypes.bool,
+    show: PropTypes.bool,
+  },
+
+  getDefaultProps() {
+    return {
+      open: false,
+    };
+  },
+
+  getInitialState() {
+    return {
+      open: this.props.open,
+      primaryColor: false,
+      show: this.props.show,
+    };
+  },
+
+  componentWillMount() {
+    this._registerGlobalEvents();
+  },
+
+  componentWillReceiveProps(nextProps) {
+    let open = nextProps.open;
+    let show = nextProps.show;
+    this.setState({
+      open: open,
+      show: show,
+    });
+  },
+
+  open() {
+    let fn = this.props.openRightNav;
+    if (_.isFunction(fn)) { fn(); }
+  },
+
+  close() {
+    let fn = this.props.closeRightNav;
+    if (_.isFunction(fn)) { fn(); }
+  },
+
+  show() {
+    let fn = this.props.showRightNav;
+    if (_.isFunction(fn)) { fn(); }
+  },
+
+  dismiss() {
+    let fn = this.props.dismissRightNav;
+    if (_.isFunction(fn)) { fn(); }
+  },
+
+  setColor(token) {
+    this.setState({
+      primaryColor: token === 'primary',
+    });
+  },
+
+  getStyles() {
+    let muiTheme = this.context.muiTheme;
+    let primaryColor = this.state.primaryColor;
+    let theme = muiTheme.appBar;
+    let iconButtonSize = muiTheme.button.iconButtonSize;
+    let zIndex = muiTheme.zIndex;
+
+    let styles = {
+      root: {
+        position: 'fixed',
+        right: 0,
+        width: '48px',
+        height: '48px',
+        marginTop: '8px',
+        marginRight: '16px',
+        padding: '9px',
+        boxSizing: 'border-box',
+        zIndex: 1001,
+      },
+      avatar: {
+        cursor: 'pointer',
+      },
+      menu: {
+        fill: primaryColor ? theme.color : theme.textColor,
+        color: primaryColor ? theme.color : theme.textColor,
+      },
+      iconButton: {
+        iconStyle: {
+          fill: primaryColor ? theme.color : theme.textColor,
+          color: primaryColor ? theme.color : theme.textColor,
+        },
+        style: {
+          // marginTop: (theme.height - iconButtonSize) / 2,
+          // marginRight: 8,
+          // marginLeft: -16,
+        },
+      },
+    };
+
+    return styles;
+  },
+
+  renderAvatar() {
+    let local = this.props.local;
+    let photoURL = local ? local.get('photoURL') : null;
+
+    let el = (
+      <Avatar
+        src={photoURL}
+        style={this.style('avatar')}
+        onTouchTap={this._handleTouchTap}
+      />
+    );
+
+    return el;
+  },
+
+  render() {
+    let styles = this.getStyles();
+
+    let {
+      open,
+      show,
+    } = this.state;
+
+    return (
+      <div
+        key="account"
+        ref="root"
+        style={this.style('root')}
+      >
+        {show && this.renderAvatar()}
+        {
+          show &&
+          <RightNavMain
+            {...this.props}
+            ref="rightNav"
+            open={open}
+            onNavOpen={this._handleOpen}
+            onNavClose={this._handleClose}
+          />
+        }
+      </div>
+    );
+  },
+
+  _handleOpen() {
+    let leftNav = global.register.leftNav;
+    if (leftNav) { leftNav.dismiss(); }
+  },
+
+  _handleClose() {
+    let leftNav = global.register.leftNav;
+    if (leftNav) { leftNav.show(); }
+    let fn = this.props.closeRightNav;
+    if (_.isFunction(fn)) { fn(); }
+  },
+
+  _handleTouchTap() {
+    this.open();
+  },
+
+  _getRightNav() {
+    return this.refs.rightNav;
+  },
+
+  _registerGlobalEvents() {
+    let self = this;
+    if (!global.register) { global.register = {}; }
+    if (!global.register.rightNav) { global.register.rightNav = {}; }
+
+    let globalRightNav = global.register.rightNav;
+
+    globalRightNav.open = this.open;
+    globalRightNav.close = this.close;
+    globalRightNav.show = this.show;
+    globalRightNav.dismiss = this.dismiss;
+    globalRightNav.setColor = this.setColor;
+    globalRightNav.onNavOpen = this._handleOpen;
+    globalRightNav.onNavClose = this._handleClose;
+    globalRightNav.getBoundingClientRect = () => {
+      let rootElement = self;
+      let boundingClientRect = rootElement.getBoundingClientRect();
+
+      return boundingClientRect;
+    };
+  },
+});
+
+module.exports = RightNav;

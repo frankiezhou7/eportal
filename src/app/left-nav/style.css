@@ -1,0 +1,42 @@
+.combo-search {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding-bottom: 123px;
+  box-sizing: border-box;
+}
+
+.combo-search .combo-search-entry {
+  cursor: pointer;
+}
+
+.combo-search .combo-search-entry:hover {
+  background-color: #eaeaea;
+}
+
+.combo-search-initial ul {
+  color: grey;
+  list-style: disc;
+  list-style-position: inside;
+  padding-left: 0;
+}
+
+.combo-search-initial b {
+  color: #f5a623;
+}
+
+.main-logo path {
+  transition: fill 800ms ease-out;
+}
+
+.main-logo.white path {
+  fill: #FFFFFF;
+}
+
+.main-logo.colorful .fill-blue {
+  fill: #004588;
+}
+
+.main-logo.colorful .fill-yellow {
+  fill: #F39800;
+}

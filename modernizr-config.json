@@ -1,0 +1,29 @@
+{
+  "minify": true,
+  "classPrefix": "mod_",
+  "options": [
+    "domPrefixes",
+    "prefixes",
+    "addTest",
+    "atRule",
+    "hasEvent",
+    "mq",
+    "setClasses"
+  ],
+  "feature-detects": [
+    "test/cookies",
+    "test/cors",
+    "test/fullscreen-api",
+    "test/history",
+    "test/json",
+    "test/notification",
+    "test/svg",
+    "test/touchevents",
+    "test/unicode",
+    "test/websockets",
+    "test/css/all",
+    "test/file/api",
+    "test/storage/localstorage",
+    "test/storage/sessionstorage"
+  ]
+}

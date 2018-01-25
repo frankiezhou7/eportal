@@ -1,0 +1,33 @@
+const React = require('react');
+const alt = require('epui-alt');
+const AltContainer = require('epui-alt/lib/AltContainer');
+const PropTypes = React.PropTypes;
+const Register = require('./register');
+const Router = require('react-router');
+const Translatable = require('epui-intl').mixin;
+
+require('~/src/stores/user');
+const userStore = alt.findStore('user');
+const userActions = alt.findActions('user');
+
+const RegisterForm = React.createClass({
+
+  contextTypes: {
+    muiTheme: PropTypes.object,
+    router: PropTypes.object,
+  },
+
+  render() {
+    return (
+      <AltContainer
+        store={userStore}
+        actions={userActions}
+      >
+        <Register />
+      </AltContainer>
+    );
+  },
+
+});
+
+module.exports = RegisterForm;
